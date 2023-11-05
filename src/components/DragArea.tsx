@@ -1,28 +1,19 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, ReactNode, Context, Provider, useContext, useCallback } from "react";
 import "./DragArea.scss";
 import { DragItem } from "./DragItem";
 import { getCoords } from "../../src/helpers";
 
 interface DragAreaProps {
-  itemsData: IDragItem[];
+  itemsData?: IDragItem[];
+  children?: ReactNode;
+  ContextProvider: React.Provider<IDragContext>;
 }
 
-export const DragArea = ({ itemsData }: DragAreaProps) => {
+export const DragArea = ({ children, ContextProvider }: DragAreaProps) => {
   const [draggingBlockId, setDraggingBlockId] = useState<string | null>("");
-
   const itemsRef = useRef<Record<string, HTMLElement>>({});
 
   const containerRef = useRef<HTMLDivElement | null>(null);
-
-  const startDraggingHandler = (id: string) => {
-    setDraggingBlockId(id);
-  };
-
-  const stopDraggingHandler = (id: string) => {
-    if (id !== draggingBlockId) return;
-
-    setDraggingBlockId(null);
-  };
 
   useEffect(() => {
     if (!containerRef.current) return;
@@ -34,11 +25,13 @@ export const DragArea = ({ itemsData }: DragAreaProps) => {
 
       const element = itemsRef.current[draggingBlockId];
 
-      const conrainerCords = getCoords(containerRef.current!);
+      if (!element) return;
+
+      const conrainerCords = getCoords(container);
       const elementCords = getCoords(element);
 
-      let elementNewLeft = event.pageX - conrainerCords.left - itemsRef.current[draggingBlockId].offsetWidth / 2;
-      let elementNewTop = event.pageY - conrainerCords.top - itemsRef.current[draggingBlockId].offsetHeight / 2;
+      let elementNewLeft = event.pageX - conrainerCords.left - element.offsetWidth / 2;
+      let elementNewTop = event.pageY - conrainerCords.top - element.offsetHeight / 2;
 
       elementNewTop = elementNewTop < 0 ? 0 : elementNewTop;
       elementNewLeft = elementNewLeft < 0 ? 0 : elementNewLeft;
@@ -50,49 +43,35 @@ export const DragArea = ({ itemsData }: DragAreaProps) => {
 
       element.style.left = elementNewLeft + "px";
       element.style.top = elementNewTop + "px";
-
-      console.log(elementCords, conrainerCords);
     };
 
     const mouseMoveHandler = (event: MouseEvent) => {
-      console.log("move");
       moveBlock(event);
       event.stopPropagation();
       event.stopImmediatePropagation();
       return false;
     };
 
-    document.addEventListener("mousemove", mouseMoveHandler, true);
+    container.addEventListener("mousemove", mouseMoveHandler, true);
 
     return () => {
-      document.removeEventListener("mousemove", mouseMoveHandler, true);
+      container.removeEventListener("mousemove", mouseMoveHandler, true);
     };
   }, [draggingBlockId]);
 
-  const renderItems = () => {
-    return itemsData.map(({ id, color, x, y }: IDragItem) => {
-      return (
-        <DragItem
-          key={id}
-          id={id}
-          color={color}
-          x={x}
-          y={y}
-          onStartDragging={startDraggingHandler}
-          onStopDragging={stopDraggingHandler}
-          isDragging
-          ref={(element: HTMLElement) => {
-            console.log("fff");
-            itemsRef.current = { ...itemsRef.current, [id]: element };
-          }}
-        />
-      );
-    });
+  const setItem = useCallback((id: string, element: HTMLElement) => {
+    itemsRef.current = { ...itemsRef.current, [id]: element };
+  }, []);
+
+  const contextProps = {
+    draggingBlockId,
+    setDraggingBlockId,
+    setItem,
   };
 
   return (
     <div className="drag-area" ref={containerRef}>
-      {renderItems()}
+      <ContextProvider value={contextProps}>{children}</ContextProvider>
     </div>
   );
 };
