@@ -1,0 +1,14 @@
+.block {
+  position: absolute;
+  height: 100px;
+  width: 100px;
+  border-radius: 10px;
+  border: 1px solid #000;
+  background: blue;
+  transition: box-shadow 0.2s;
+
+  &--drag {
+    box-shadow: 3px 3px 12px #000;
+    z-index: 1000;
+  }
+}
