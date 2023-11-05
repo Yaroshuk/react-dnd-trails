@@ -47,15 +47,12 @@ export const DragArea = ({ children, ContextProvider }: DragAreaProps) => {
 
     const mouseMoveHandler = (event: MouseEvent) => {
       moveBlock(event);
-      event.stopPropagation();
-      event.stopImmediatePropagation();
-      return false;
     };
 
-    container.addEventListener("mousemove", mouseMoveHandler, true);
+    document.addEventListener("mousemove", mouseMoveHandler, true);
 
     return () => {
-      container.removeEventListener("mousemove", mouseMoveHandler, true);
+      document.removeEventListener("mousemove", mouseMoveHandler, true);
     };
   }, [draggingBlockId]);
 

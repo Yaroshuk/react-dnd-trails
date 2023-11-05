@@ -24,26 +24,17 @@ const blockArray = [
 function App() {
   const renderItems = (context: any) => {
     return blockArray.map(({ id, color, x, y }: IDragItem) => {
-      return (
-        <DragItem
-          key={id}
-          id={id}
-          color={color}
-          x={x}
-          y={y}
-          context={DragContext}
-        />
-      );
+      return <DragItem key={id} id={id} color={color} x={x} y={y} context={context} />;
     });
   };
 
   const { DragContainer, DragContext } = useDrag();
 
-  const { DragContainer: Drag, DragContext: Ctx } = useDrag();
+  const { DragContainer: DragContainer2, DragContext: DragContext2 } = useDrag();
 
   return (
     <div className="App">
-      <Drag>{renderItems(Ctx)}</Drag>
+      <DragContainer2>{renderItems(DragContext2)}</DragContainer2>
       <DragContainer>{renderItems(DragContext)}</DragContainer>
     </div>
   );
