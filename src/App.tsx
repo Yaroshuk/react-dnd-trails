@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useReducer } from "react";
 import "./App.scss";
-import { Block } from "./components/Block";
+import { DragItem } from "./components/DragItem";
+import { DragArea } from "./components/DragArea";
 
 const blockArray = [
   {
@@ -45,20 +46,6 @@ function App() {
 
   const [state, dispatch] = useReducer(reducer, {});
 
-  const startDraggingHandler = (id: string, shiftX: number, shiftY: number) => {
-    setDraggingBlock(id);
-    setBlockShiftX(shiftX);
-    setBlockShiftY(shiftY);
-  };
-
-  const stopDraggingHandler = (id: string) => {
-    if (id !== draggingBlock) return;
-
-    setDraggingBlock(null);
-    setBlockShiftX(0);
-    setBlockShiftY(0);
-  };
-
   const blockInitHandler = (id: string, element: HTMLDivElement) => {
     dispatch({ type: "add_element", id, element });
   };
@@ -84,25 +71,29 @@ function App() {
     };
   }, [draggingBlock, state, blockShiftX, blockShiftY]);
 
-  const blockRender = () => {
-    return blockArray.map(({ id, color, x, y }) => {
-      return (
-        <Block
-          key={id}
-          id={id}
-          isDragging={id === draggingBlock}
-          onStartDragging={startDraggingHandler}
-          onStopDragging={() => stopDraggingHandler(id)}
-          init={(element: HTMLDivElement) => blockInitHandler(id, element)}
-          color={color}
-          x={x}
-          y={y}
-        />
-      );
-    });
-  };
+  // const blockRender = () => {
+  //   return blockArray.map(({ id, color, x, y }) => {
+  //     return (
+  //       <DragItem
+  //         key={id}
+  //         id={id}
+  //         isDragging={id === draggingBlock}
+  //         onStartDragging={startDraggingHandler}
+  //         onStopDragging={() => stopDraggingHandler(id)}
+  //         init={(element: HTMLDivElement) => blockInitHandler(id, element)}
+  //         color={color}
+  //         x={x}
+  //         y={y}
+  //       />
+  //     );
+  //   });
+  // };
 
-  return <div className="App">{blockRender()}</div>;
+  return (
+    <div className="App">
+      <DragArea itemsData={blockArray} />
+    </div>
+  );
 }
 
 export default App;
