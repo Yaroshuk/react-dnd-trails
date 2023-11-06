@@ -1,7 +1,9 @@
+@import "./styles//variables";
+
 .App {
   display: flex;
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  background: #ccc;
+  background: $gray;
 }

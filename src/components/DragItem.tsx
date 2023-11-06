@@ -5,14 +5,13 @@ import { useDraggable } from "../../src/hooks/useDraggable";
 
 interface BlockProps {
   id: string;
-  // isDragging: boolean;
-  // onStartDragging: (id: string) => void;
-  // onStopDragging: (id: string) => void;
   color?: string;
   x?: number;
   y?: number;
   context: any;
 }
+
+const mainClass = "block";
 
 export const DragItem = ({ id, color = "#ccc", x = 0, y = 0, context }: BlockProps) => {
   const ref = useRef<HTMLDivElement | null>(null);
@@ -21,14 +20,20 @@ export const DragItem = ({ id, color = "#ccc", x = 0, y = 0, context }: BlockPro
 
   const onMouseDownHandler = useCallback(
     (event: React.MouseEvent<HTMLDivElement>) => {
-      // //if (!ref.current) return;
 
-      // var coords = getCoords(ref.current);
+      const target = event.target as HTMLDivElement;
+      const span = target.closest('span');
 
-      // const shiftX = event.pageX - coords.left;
-      // const shiftY = event.pageY - coords.top;
+      if(!span) return;
 
-      startDragging();
+      if (!ref.current) return;
+
+      var coords = getCoords(ref.current);
+
+      const shiftX = event.pageX - coords.left;
+      const shiftY = event.pageY - coords.top;
+
+      startDragging(shiftX, shiftY);
     },
     [startDragging]
   );
@@ -48,11 +53,13 @@ export const DragItem = ({ id, color = "#ccc", x = 0, y = 0, context }: BlockPro
 
   return (
     <div
-      className={`block ${isDragging ? "block--drag" : ""}`}
+      className={`${mainClass} ${isDragging ? `${mainClass}--drag` : ""}`}
       style={{ background: color, left: x, top: y }}
-      onMouseDown={onMouseDownHandler}
       onMouseUp={onMouseUpHandler}
+      onMouseDown={onMouseDownHandler}
       ref={ref}
-    />
+    >
+      <span className={`${mainClass}__head`} />
+    </div>
   );
 };

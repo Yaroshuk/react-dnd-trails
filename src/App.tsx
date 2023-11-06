@@ -1,23 +1,24 @@
-import React, { useState, useEffect, useReducer } from "react";
+import React from "react";
 import "./App.scss";
 import { DragItem } from "./components/DragItem";
 import { useDrag } from "./hooks/useDrag";
+import { COLOR } from "./constants";
 
 const blockArray = [
   {
     id: "1",
     x: 200,
     y: 200,
-    color: "red",
+    color: COLOR.blue,
   },
   {
     id: "2",
     x: 150,
-    color: "blue",
+    color: COLOR.orange,
   },
   {
     id: "3",
-    color: "green",
+    color: COLOR.yellow,
   },
 ];
 
@@ -30,11 +31,8 @@ function App() {
 
   const { DragContainer, DragContext } = useDrag();
 
-  const { DragContainer: DragContainer2, DragContext: DragContext2 } = useDrag();
-
   return (
     <div className="App">
-      <DragContainer2>{renderItems(DragContext2)}</DragContainer2>
       <DragContainer>{renderItems(DragContext)}</DragContainer>
     </div>
   );

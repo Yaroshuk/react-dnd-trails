@@ -1,7 +1,7 @@
 import { useCallback, useContext } from "react";
 
 export const useDraggable = (context: React.Context<IDragContext>, id: string) => {
-  const { setItem, setDraggingBlockId, draggingBlockId } = useContext<IDragContext>(context);
+  const { setItem, draggingBlockId, startDragging: startDraggingHandler, stopDragging: stopDraggingHandler } = useContext<IDragContext>(context);
 
   const initDraggable = useCallback(
     (element: HTMLElement) => {
@@ -10,15 +10,11 @@ export const useDraggable = (context: React.Context<IDragContext>, id: string) =
     [id, setItem]
   );
 
-  const startDragging = () => setDraggingBlockId(id);
-
-  const stopDragging = () => {
-    if (draggingBlockId === id) {
-      setDraggingBlockId(null);
-    }
-  };
-
   const isDragging = id === draggingBlockId;
+
+  const startDragging = (shiftX?: number, shiftY?: number) => startDraggingHandler(id, shiftX, shiftY);
+
+  const stopDragging = () => stopDraggingHandler(id);
 
   return { initDraggable, startDragging, stopDragging, isDragging };
 };

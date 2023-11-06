@@ -4,8 +4,9 @@ import { DragArea } from "../components/DragArea";
 export const useDrag = () => {
   const DragContext = createContext<IDragContext>({
     draggingBlockId: null,
-    setDraggingBlockId: (id: string | null) => {},
     setItem: (id: string, element: HTMLElement) => {},
+    startDragging: (id: string, shiftX?: number, shiftY?: number) => {},
+    stopDragging: (id: string) => {},
   });
 
   const DragContainer = useCallback(

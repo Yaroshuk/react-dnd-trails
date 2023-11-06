@@ -6,7 +6,8 @@ interface IDragItem {
 }
 
 interface IDragContext {
-  draggingBlockId: string | null,
-  setDraggingBlockId: (id: string | null) => void,
-  setItem: (id: string, element: HTMLElement) => void,
+  draggingBlockId: string | null;
+  setItem: (id: string, element: HTMLElement) => void;
+  startDragging: (id: string, shiftX?: number, shiftY?: number) => void;
+  stopDragging: (id: string) => void;
 }
