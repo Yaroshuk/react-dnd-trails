@@ -20,5 +20,5 @@
       "*": ["src/*.d.ts"]
     }
   },
-  "include": ["src"]
+  "include": ["src", "src/canvas"]
 }

@@ -11,3 +11,16 @@ interface IDragContext {
   startDragging: (id: string, shiftX?: number, shiftY?: number) => void;
   stopDragging: (id: string) => void;
 }
+
+type ReduxPayload = {
+  id: string[];
+};
+
+type ReduxLine = {
+  type: "mouse" | "object",
+  id: string[];
+}
+
+type ReduxState = {
+  lines: ReduxLine[];
+};

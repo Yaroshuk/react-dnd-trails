@@ -1,7 +1,9 @@
 import { useState, useEffect, useRef, ReactNode, Context, Provider, useContext, useCallback } from "react";
+import { useDispatch } from "react-redux";
 import "./DragArea.scss";
 import { DragItem } from "./DragItem";
 import { getCoords } from "../../src/helpers";
+import { removeMouseLine } from "../../src/store/reducer";
 
 interface DragAreaProps {
   itemsData?: IDragItem[];
@@ -17,6 +19,8 @@ export const DragArea = ({ children, ContextProvider }: DragAreaProps) => {
   const itemsRef = useRef<Record<string, HTMLElement>>({});
 
   const containerRef = useRef<HTMLDivElement | null>(null);
+
+  const dispatch = useDispatch()
 
   const startDraggingHandler = (id: string, shiftX: number = 0, shiftY: number = 0) => {
     console.log("1111", id);
@@ -70,6 +74,8 @@ export const DragArea = ({ children, ContextProvider }: DragAreaProps) => {
       if (draggingBlockId) {
         setDraggingBlockId(null);
       }
+
+      dispatch(removeMouseLine())
     };
 
     document.addEventListener("mousemove", mouseMoveHandler);

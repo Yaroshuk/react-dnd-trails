@@ -33,7 +33,10 @@ function App() {
 
   return (
     <div className="App">
-      <DragContainer>{renderItems(DragContext)}</DragContainer>
+      <DragContainer>
+        {renderItems(DragContext)}
+        <canvas id="canvas" className="canvas" />
+      </DragContainer>
     </div>
   );
 }
